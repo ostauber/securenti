@@ -1,6 +1,14 @@
 <% provide(:title, "Home") %>
-<h1>Worrenti</h1>
-<p>
-  This is the home page for the Worrenti
-  <a></a>
-</p>
+
+<div class="center jumbotron">
+  <h1>The "worry-not" app for rent with warranty</h1>
+
+  <h2>
+    <a href="https://www.rentalutions.com/">Copying from Rentalutions</a>
+  </h2>
+
+  <%= link_to "Sign up now!", '#', class: "btn btn-lg btn-primary" %>
+</div>
+
+<%= link_to image_tag("worrenti.PNG", alt: "worrenti logo"),
+            'http://worrenti.com/' %>
