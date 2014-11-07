@@ -2,7 +2,6 @@ class User < ActiveRecord::Base
   attr_accessor :remember_token, :activation_token, :reset_token
   before_save   :downcase_email
   before_create :create_activation_digest
-  attr_accessor :remember_token
   before_save { self.email = email.downcase }
   validates :name,  presence: true, length: { maximum: 50 }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
@@ -56,7 +55,7 @@ class User < ActiveRecord::Base
 
   # Sends activation email.
   def send_activation_email
-    UserMailer.account_activation(self)
+    UserMailer.account_activation(self).deliver
   end
 
   # Sets the password reset attributes.
@@ -68,13 +67,17 @@ class User < ActiveRecord::Base
 
   # Sends password reset email.
   def send_password_reset_email
-    UserMailer.password_reset(self).deliver_now
+    UserMailer.password_reset(self).deliver
   end
 
+  # Returns true if a password reset has expired.
+  def password_reset_expired?
+    reset_sent_at < 2.hours.ago
+  end
 
   private
 
-      # Converts email to all lower-case.
+    # Converts email to all lower-case.
     def downcase_email
       self.email = email.downcase
     end
